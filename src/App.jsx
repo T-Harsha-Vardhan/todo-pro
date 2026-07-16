@@ -5,27 +5,29 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import FilterTabs from "./components/FilterTabs/FilterTabs";
 import TodoList from "./components/TodoList/TodoList";
 import TodoStats from "./components/TodoStats/TodoStats";
-
-const todos = [
-  {
-    id: 1,
-    title: "Learn React",
-  },
-  {
-    id: 2,
-    title: "Build Todo App",
-  },
-  {
-    id: 3,
-    title: "Review PR",
-  },
-];
+import { useState } from "react";
 
 const App = () => {
+  const [todos, setTodos] = useState([]);
+
+  const handleCreateTodo = (title) => {
+    const trimmedTitle = title.trim();
+
+    if (!trimmedTitle) return;
+
+    const newTodo = {
+      id: Date.now(),
+      title: trimmedTitle,
+      completed: false,
+    };
+
+    setTodos((prev) => [...prev, newTodo]);
+  };
+
   return (
     <main className="h-screen w-screen max-h-screen overflow-x-hidden flex flex-col py-8 max-w-5xl mx-auto">
       <Header />
-      <TodoForm />
+      <TodoForm onCreateTodo={handleCreateTodo} />
       <SearchBar />
       <FilterTabs />
       <TodoList todos={todos} />
