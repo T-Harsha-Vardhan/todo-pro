@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Header from "./components/Header/Header";
 import TodoForm from "./components/TodoForm/TodoForm";
@@ -7,10 +7,19 @@ import FilterTabs from "./components/FilterTabs/FilterTabs";
 import TodoList from "./components/TodoList/TodoList";
 import TodoStats from "./components/TodoStats/TodoStats";
 
+const STORAGE_KEY = "todo-pro.todos";
+
 const App = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const storedTodos = localStorage.getItem(STORAGE_KEY);
+    return storedTodos ? JSON.parse(storedTodos) : [];
+  });
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+  }, [todos]);
 
   const handleCreateTodo = (title) => {
     const trimmedTitle = title.trim();
@@ -33,7 +42,7 @@ const App = () => {
 
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
-        todo.id === id ? { ...todo, title: value } : todo,
+        todo.id === id ? { ...todo, title: trimmed } : todo,
       ),
     );
   };
