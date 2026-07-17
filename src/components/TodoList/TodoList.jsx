@@ -1,7 +1,7 @@
 import EmptyState from "../EmptyState/EmptyState";
 import TodoItem from "../TodoItem/TodoItem";
 
-const TodoList = ({ todos, onToggle, onDelete }) => {
+const TodoList = ({ todos, onUpdate, onToggle, onDelete }) => {
   return (
     <ul
       id="todo-list"
@@ -12,6 +12,7 @@ const TodoList = ({ todos, onToggle, onDelete }) => {
           <TodoItem
             key={todo.id}
             todo={todo}
+            onUpdate={onUpdate}
             onToggle={onToggle}
             onDelete={onDelete}
           />

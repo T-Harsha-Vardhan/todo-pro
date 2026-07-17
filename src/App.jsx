@@ -26,6 +26,18 @@ const App = () => {
     setTodos((prev) => [...prev, newTodo]);
   };
 
+  const handleUpdateTodo = (id, value) => {
+    const trimmed = value.trim();
+
+    if (!trimmed) return;
+
+    setTodos((prevTodos) =>
+      prevTodos.map((todo) =>
+        todo.id === id ? { ...todo, title: value } : todo,
+      ),
+    );
+  };
+
   const handleToggleTodo = (id) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
@@ -100,6 +112,7 @@ const App = () => {
       <FilterTabs filter={filter} onFilterChange={handleFilterChange} />
       <TodoList
         todos={filteredTodos}
+        onUpdate={handleUpdateTodo}
         onToggle={handleToggleTodo}
         onDelete={handleDeleteTodo}
       />
