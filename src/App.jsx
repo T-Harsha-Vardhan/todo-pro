@@ -68,8 +68,29 @@ const App = () => {
       }
     });
 
+  const totalTasks = todos.length;
+  const completedTasks = todos.filter((todo) => todo.completed).length;
+  const remainingTasks = totalTasks - completedTasks;
+  const progress =
+    totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
+
+  const stats = [
+    {
+      title: "Total",
+      value: totalTasks,
+    },
+    {
+      title: "Completed",
+      value: completedTasks,
+    },
+    {
+      title: "Remaining",
+      value: remainingTasks,
+    },
+  ];
+
   return (
-    <main className="h-screen w-screen max-h-screen overflow-x-hidden flex flex-col py-8 max-w-5xl mx-auto">
+    <main className="h-full lg:h-screen lg:w-screen lg:max-h-screen overflow-x-hidden flex flex-col py-8 max-w-5xl mx-auto">
       <Header />
       <TodoForm onCreateTodo={handleCreateTodo} />
       <SearchBar
@@ -82,7 +103,7 @@ const App = () => {
         onToggle={handleToggleTodo}
         onDelete={handleDeleteTodo}
       />
-      <TodoStats />
+      <TodoStats stats={stats} progress={progress} />
     </main>
   );
 };
