@@ -1,4 +1,4 @@
-const FILTERS = ["all", "active", "completed"];
+import { FILTERS } from "../../constants/filters";
 
 const FilterTabs = ({ filter, onFilterChange }) => {
   return (

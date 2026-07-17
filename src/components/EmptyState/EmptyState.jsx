@@ -7,9 +7,6 @@ const EmptyState = () => {
       <h2 className="text-xl text-center">
         No tasks avaliable currently. <br /> Please start adding your first task
       </h2>
-      <button className="bg-pink-500 text-white p-2 rounded-lg flex-auto cursor-pointer">
-        + Create Task
-      </button>
     </div>
   );
 };

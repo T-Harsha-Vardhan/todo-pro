@@ -6,19 +6,20 @@ import SearchBar from "./components/SearchBar/SearchBar";
 import FilterTabs from "./components/FilterTabs/FilterTabs";
 import TodoList from "./components/TodoList/TodoList";
 import TodoStats from "./components/TodoStats/TodoStats";
-
-const STORAGE_KEY = "todo-pro.todos";
+import { filterTodos } from "./utils/filterTodos";
+import { stats } from "./utils/createStats";
+import { loadTodos, saveTodos } from "./utils/storage";
 
 const App = () => {
   const [todos, setTodos] = useState(() => {
-    const storedTodos = localStorage.getItem(STORAGE_KEY);
-    return storedTodos ? JSON.parse(storedTodos) : [];
+    const storedTodos = loadTodos();
+    return storedTodos ? storedTodos : [];
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    saveTodos(todos);
   }, [todos]);
 
   const handleCreateTodo = (title) => {
@@ -72,43 +73,9 @@ const App = () => {
     setFilter(filter);
   };
 
-  const filteredTodos = todos
-    .filter((todo) =>
-      todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
-    .filter((todo) => {
-      switch (filter) {
-        case "completed":
-          return todo.completed;
+  const filteredTodos = filterTodos(todos, searchQuery, filter);
 
-        case "active":
-          return !todo.completed;
-
-        default:
-          return true;
-      }
-    });
-
-  const totalTasks = todos.length;
-  const completedTasks = todos.filter((todo) => todo.completed).length;
-  const remainingTasks = totalTasks - completedTasks;
-  const progress =
-    totalTasks === 0 ? 0 : Math.round((completedTasks / totalTasks) * 100);
-
-  const stats = [
-    {
-      title: "Total",
-      value: totalTasks,
-    },
-    {
-      title: "Completed",
-      value: completedTasks,
-    },
-    {
-      title: "Remaining",
-      value: remainingTasks,
-    },
-  ];
+  const { statsData, progress } = stats(todos);
 
   return (
     <main className="h-full lg:h-screen lg:w-screen lg:max-h-screen overflow-x-hidden flex flex-col py-8 max-w-5xl mx-auto">
@@ -125,7 +92,7 @@ const App = () => {
         onToggle={handleToggleTodo}
         onDelete={handleDeleteTodo}
       />
-      <TodoStats stats={stats} progress={progress} />
+      <TodoStats stats={statsData} progress={progress} />
     </main>
   );
 };
