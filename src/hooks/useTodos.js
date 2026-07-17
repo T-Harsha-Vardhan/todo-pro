@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { loadTodos, saveTodos } from "../utils/storage";
 
 function useTodos() {
@@ -8,7 +8,7 @@ function useTodos() {
     saveTodos(todos);
   }, [todos]);
 
-  const createTodo = (title) => {
+  const createTodo = useCallback((title) => {
     const trimmedTitle = title.trim();
 
     if (!trimmedTitle) return;
@@ -20,9 +20,9 @@ function useTodos() {
     };
 
     setTodos((prev) => [...prev, newTodo]);
-  };
+  }, []);
 
-  const updateTodo = (id, value) => {
+  const updateTodo = useCallback((id, value) => {
     const trimmed = value.trim();
 
     if (!trimmed) return;
@@ -32,9 +32,9 @@ function useTodos() {
         todo.id === id ? { ...todo, title: trimmed } : todo,
       ),
     );
-  };
+  }, []);
 
-  const toggleTodo = (id) => {
+  const toggleTodo = useCallback((id) => {
     setTodos((prevTodos) =>
       prevTodos.map((todo) =>
         todo.id === id
@@ -45,11 +45,11 @@ function useTodos() {
           : todo,
       ),
     );
-  };
+  }, []);
 
-  const deleteTodo = (id) => {
+  const deleteTodo = useCallback((id) => {
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
+  }, []);
 
   return {
     todos,

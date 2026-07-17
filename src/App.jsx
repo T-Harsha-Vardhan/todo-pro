@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import useTodos from "./hooks/useTodos";
 import "./App.css";
 import Header from "./components/Header/Header";
@@ -16,7 +16,9 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
 
-  const filteredTodos = filterTodos(todos, searchQuery, filter);
+  const filteredTodos = useMemo(() => {
+    return filterTodos(todos, searchQuery, filter);
+  }, [todos, searchQuery, filter]);
 
   const { statsData, progress } = stats(todos);
 

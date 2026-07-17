@@ -1,5 +1,4 @@
 export const filterTodos = (todos, searchQuery, filter) => {
-  console.log(todos);
   return todos
     .filter((todo) =>
       todo.title.toLowerCase().includes(searchQuery.toLowerCase()),
