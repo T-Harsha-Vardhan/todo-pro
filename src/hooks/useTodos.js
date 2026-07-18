@@ -20,6 +20,8 @@ function useTodos() {
     };
 
     setTodos((prev) => [...prev, newTodo]);
+
+    return newTodo;
   }, []);
 
   const updateTodo = useCallback((id, value) => {

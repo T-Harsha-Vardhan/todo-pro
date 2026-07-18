@@ -1,7 +1,18 @@
 import { Check, PencilIcon, Trash, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-const TodoItem = ({ todo, onUpdate, onToggle, onDelete }) => {
+const TodoItem = ({ todo, onUpdate, onToggle, onDelete, lastAddedTodo }) => {
+  const liRef = useRef(null);
+
+  useEffect(() => {
+    if (lastAddedTodo !== todo.id) return;
+
+    liRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+    });
+  }, [lastAddedTodo, todo.id]);
+
   let [isEditing, setIsEditing] = useState(false);
   let [editValue, setEditValue] = useState(todo.title);
 
@@ -44,7 +55,10 @@ const TodoItem = ({ todo, onUpdate, onToggle, onDelete }) => {
   };
 
   return (
-    <li className="border-2 border-gray-200 p-2 rounded-lg flex gap-4 items-center">
+    <li
+      ref={liRef}
+      className={`border-2 border-gray-200 p-2 rounded-lg flex gap-4 items-center ${lastAddedTodo === todo.id ? "bg-pink-100" : ""}`}
+    >
       <div className="flex-1 flex items-center gap-2">
         <input
           type="checkbox"
